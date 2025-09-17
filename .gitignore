@@ -1,3 +1,5 @@
 payments-core/src/main/resources
 ledger/src/main/resources
 infrastructure/src/main/resources
+utilities
+docker-compose.yaml
