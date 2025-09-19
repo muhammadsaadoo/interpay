@@ -10,9 +10,7 @@
     <packaging>pom</packaging>
 
     <modules>
-        <module>payments-core</module>
-        <module>ledger</module>
-        <module>infrastructure</module>
+
     </modules>
 
     <dependencyManagement>
