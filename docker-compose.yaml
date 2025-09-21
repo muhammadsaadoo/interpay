@@ -46,13 +46,28 @@ services:
     networks:
       - interpay
 
-  payments-core:
+  api-gateway:
     build:
-      context: ./payments-core
-      dockerfile: Dockerfile
-    container_name: payments-core_container
+      context: .                      # project root (where parent pom.xml lives)
+      dockerfile: api-gateway/Dockerfile
+    container_name: api-gateway-container
     ports:
       - "8080:8080"
+    volumes:
+      - ./api-gateway/src/main/resources/application-docker.yaml:/app/application-docker.yaml
+    depends_on:
+      - postgres
+    networks:
+      - interpay
+    restart: unless-stopped
+
+  eureka-server:
+    build:
+      context: .                      # project root (where parent pom.xml lives)
+      dockerfile: eureka-server/Dockerfile
+    container_name: eureka-server-container
+    ports:
+      - "8761:8761"
     depends_on:
       - postgres
     networks:

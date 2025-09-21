@@ -1,5 +1,5 @@
-payments-core/src/main/resources
-ledger/src/main/resources
-infrastructure/src/main/resources
+api-gateway/src/main/resources
+eureka-server/src/main/resources
+
 utilities
 docker-compose.yaml
