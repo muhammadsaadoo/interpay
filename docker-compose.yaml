@@ -89,9 +89,22 @@ services:
       - interpay
     restart: unless-stopped
 
+  redis:
+    image: redis:latest
+    container_name: redis-container
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - interpay
+    restart: unless-stopped
+
 volumes:
   postgres:
   pgadmin:
+  redis_data:
+    driver: local
 
 networks:
   interpay:
