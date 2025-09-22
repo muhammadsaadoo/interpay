@@ -1,5 +1,6 @@
 api-gateway/src/main/resources
 eureka-server/src/main/resources
+user-service/src/main/resources
 
 utilities
 docker-compose.yaml

@@ -14,11 +14,15 @@ public class ApiGatewayApplication {
 
 	public static void main(String[] args) {
 
-	ConfigurableApplicationContext context= SpringApplication.run(ApiGatewayApplication.class, args);
-		ConfigurableEnvironment environment=context.getEnvironment();
-		System.out.println(Arrays.toString(environment.getActiveProfiles()));
-		System.out.println("API Gateway Service is up..............");
+        try {
+            ConfigurableApplicationContext context= SpringApplication.run(ApiGatewayApplication.class, args);
+            ConfigurableEnvironment environment=context.getEnvironment();
+            System.out.println(Arrays.toString(environment.getActiveProfiles()));
+            System.out.println("API Gateway Service is up..............");
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
 
-	}
+    }
 
 }

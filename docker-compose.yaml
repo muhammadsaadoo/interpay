@@ -52,9 +52,24 @@ services:
       dockerfile: api-gateway/Dockerfile
     container_name: api-gateway-container
     ports:
-      - "8080:8080"
+      - "8086:8086"
     volumes:
       - ./api-gateway/src/main/resources/application-docker.yaml:/app/application-docker.yaml
+    depends_on:
+      - postgres
+    networks:
+      - interpay
+    restart: unless-stopped
+
+  user-service:
+    build:
+      context: .                      # project root (where parent pom.xml lives)
+      dockerfile: user-service/Dockerfile
+    container_name: user-service-container
+    ports:
+      - "8085:8085"
+    volumes:
+      - ./user-service/src/main/resources/application-docker.yaml:/app/application-docker.yaml
     depends_on:
       - postgres
     networks:
