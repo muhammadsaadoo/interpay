@@ -55,8 +55,7 @@ services:
       - "8086:8086"
     volumes:
       - ./api-gateway/src/main/resources/application-docker.yaml:/app/application-docker.yaml
-    depends_on:
-      - postgres
+
     networks:
       - interpay
     restart: unless-stopped
@@ -70,8 +69,7 @@ services:
       - "8085:8085"
     volumes:
       - ./user-service/src/main/resources/application-docker.yaml:/app/application-docker.yaml
-    depends_on:
-      - postgres
+
     networks:
       - interpay
     restart: unless-stopped
@@ -83,8 +81,7 @@ services:
     container_name: eureka-server-container
     ports:
       - "8761:8761"
-    depends_on:
-      - postgres
+
     networks:
       - interpay
     restart: unless-stopped

@@ -1,5 +1,4 @@
 package com.interpay.api_gateway.configurations;
-
 import org.springframework.cloud.gateway.filter.ratelimit.KeyResolver;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -17,4 +16,5 @@ public class RateLimiterConfig {
                 .getHostAddress());
     }
 }
+
 
