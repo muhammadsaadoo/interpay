@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/signup")
+@RequestMapping("/auth/signup")
 public class SignupController {
     @Autowired
     private SignupServiceImpl signupService;
