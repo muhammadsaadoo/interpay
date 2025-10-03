@@ -133,18 +133,18 @@ public class LoginServiceImpl  {
                 Random random = new Random();
                 String verificationCode = String.valueOf(1000 + random.nextInt(9000));
                 System.out.println(verificationCode);
-                if(emailService.sendEnail(email,"HairCare Ai","Your verification code is "+verificationCode)){
-
-                    try {//store verification code in redis cloud
-                        redisTemplate.opsForValue().set(email, verificationCode, EXPIRATION_TIME, TimeUnit.MINUTES);
-                        return ResponseEntity
-                                .status(HttpStatus.CREATED)
-                                .body( email +"  verification code is  "+  verificationCode);
-                    } catch (Exception e) {
-                        System.out.println(e);
-                        return ResponseEntity.internalServerError().build();
-                    }
-                }
+//                if(emailService.sendEnail(email,"HairCare Ai","Your verification code is "+verificationCode)){
+//
+//                    try {//store verification code in redis cloud
+//                        redisTemplate.opsForValue().set(email, verificationCode, EXPIRATION_TIME, TimeUnit.MINUTES);
+//                        return ResponseEntity
+//                                .status(HttpStatus.CREATED)
+//                                .body( email +"  verification code is  "+  verificationCode);
+//                    } catch (Exception e) {
+//                        System.out.println(e);
+//                        return ResponseEntity.internalServerError().build();
+//                    }
+//                }
                 return ResponseEntity.internalServerError().build();
             } else {
                 // Handle the case where the user could not be added

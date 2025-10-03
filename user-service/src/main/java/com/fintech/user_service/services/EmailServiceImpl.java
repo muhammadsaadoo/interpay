@@ -14,8 +14,8 @@ import org.springframework.stereotype.Service;
 public class EmailServiceImpl {
     private static final Logger log = LoggerFactory.getLogger(EmailServiceImpl.class);
     //java mail sender interface use
-    @Autowired
-    private JavaMailSender javaMailSender;
+//    @Autowired
+//    private JavaMailSender javaMailSender;
 //    JavaMailSender javaMailSender= new JavaMailSender() {
 //    @Override
 //    public void send(SimpleMailMessage... simpleMessages) throws MailException {
@@ -40,22 +40,22 @@ public class EmailServiceImpl {
 
     //
 
-    public boolean sendEnail(String to,String subject,String body){
-        try{
-            SimpleMailMessage mail=new SimpleMailMessage();
-            mail.setTo(to);
-            mail.setSubject(subject);
-            mail.setText(body);
-            javaMailSender.send(mail);
-            return true;
-
-
-        }
-        catch (Exception e) {
-            log.error("exception while sending email",e);
-
-            return false;
-        }
-
-    }
+//    public boolean sendEnail(String to,String subject,String body){
+//        try{
+//            SimpleMailMessage mail=new SimpleMailMessage();
+//            mail.setTo(to);
+//            mail.setSubject(subject);
+//            mail.setText(body);
+//            javaMailSender.send(mail);
+//            return true;
+//
+//
+//        }
+//        catch (Exception e) {
+//            log.error("exception while sending email",e);
+//
+//            return false;
+//        }
+//
+//    }
 }
