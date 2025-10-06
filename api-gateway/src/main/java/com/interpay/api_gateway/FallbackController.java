@@ -23,23 +23,5 @@ public class FallbackController {
         return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(response);
     }
 
-    @GetMapping("/fallback/order-service")
-    public ResponseEntity<Map<String, Object>> orderServiceFallback() {
-        Map<String, Object> response = new HashMap<>();
-        response.put("status", "SERVICE_UNAVAILABLE");
-        response.put("message", "Order service is experiencing high traffic. Please try again in a moment.");
-        response.put("timestamp", Instant.now());
 
-        return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(response);
-    }
-
-    @GetMapping("/fallback/product-service")
-    public ResponseEntity<Map<String, Object>> productServiceFallback() {
-        Map<String, Object> response = new HashMap<>();
-        response.put("status", "SERVICE_UNAVAILABLE");
-        response.put("message", "Product service is temporarily down for maintenance.");
-        response.put("timestamp", Instant.now());
-
-        return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(response);
-    }
 }

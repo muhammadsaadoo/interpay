@@ -1,4 +1,38 @@
-testing api burst
+#testing api burst
 for i in {1..20}; do
-  curl -i http://localhost:8086/auth/test
+  curl -i http://localhost:808/auth/login/test
 done
+
+
+# 2. Test Circuit Breaker
+echo ""
+echo "2. 🔌 TESTING CIRCUIT BREAKER"
+echo "-----------------------------"
+echo "Making service fail..."
+curl -X POST http://localhost:8085/api/test/toggle-failure > /dev/null 2>&1
+
+for i in {1..4}; do
+  response=$(curl -s http://localhost:8086/api/test/circuit)
+  echo "Request $i: $response"
+done
+
+echo "Circuit should be OPEN now"
+fallback_response=$(curl -s http://localhost:8086/api/test/circuit)
+echo "Fallback response: $fallback_response"
+
+# 3. Test Retry
+echo ""
+echo "3. 🔄 TESTING RETRY MECHANISM"
+echo "-----------------------------"
+curl http://localhost:8085/api/test/reset > /dev/null 2>&1
+retry_response=$(curl -s http://localhost:8086/api/test/flaky)
+echo "Retry result: $retry_response"
+
+# 4. Restore normal operation
+echo ""
+echo "4. ✅ RESTORING NORMAL OPERATION"
+echo "-------------------------------"
+curl -X POST http://localhost:8085/api/test/toggle-failure > /dev/null 2>&1
+curl http://localhost:8085/api/test/reset > /dev/null 2>&1
+
+echo "✅ All tests completed!"
