@@ -1,8 +1,8 @@
 api-gateway/src/main/resources
 eureka-server/src/main/resources
 user-service/src/main/resources
-local-config-repo
 config-server/src/main/resources
+local-config-repo
 
 utilities
 docker-compose.yaml
