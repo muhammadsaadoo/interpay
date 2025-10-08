@@ -1,7 +1,7 @@
 api-gateway/src/main/resources
 eureka-server/src/main/resources
 user-service/src/main/resources
-config-server/src/main/resources
+config-server/src/main/resources/application-docker.yml
 local-config-repo
 
 utilities
