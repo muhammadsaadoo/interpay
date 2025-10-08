@@ -69,13 +69,13 @@ public class SignupServiceImpl {
                 redisTemplate.delete(email_verification.getEmail());
                 UserEntity dbuser = user.get();
 //                dbuser.setVerify(UserEntity.IsVerified.verified);
-                dbuser.setVerify(true);
+//                dbuser.setVerify(true);
                 UserEntity saveduser = authRepo.save(dbuser);
 //                return ResponseEntity
 //                        .status(HttpStatus.CREATED)
 //                        .body(email_verification.getEmail()+"    verification successfull");
                 // Generate JWT with username and roles
-                jwtToken = jwtUtil.generateToken(saveduser.getEmail(), saveduser.getRole().toString());
+//                jwtToken = jwtUtil.generateToken(saveduser.getEmail(), saveduser.getRole().toString());
                 return ResponseEntity.ok(new AuthResponse(jwtToken, dbuser));
             }
             return ResponseEntity

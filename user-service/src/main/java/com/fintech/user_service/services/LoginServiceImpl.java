@@ -86,8 +86,8 @@ public class LoginServiceImpl  {
             UserEntity userr=null;
             if(dbuser.isPresent()){
                 userr=dbuser.get();
-                userr.setStatus(UserEntity.Status.valueOf("Active"));
-                userr.setLastLogin(LocalDateTime.now());// Set the user status to Active
+//                userr.setStatus(UserEntity.Status.valueOf("Active"));
+//                userr.setLastLogin(LocalDateTime.now());// Set the user status to Active
                 authRepo.save(userr); // Save the updated user entity with Active status
             }
 
@@ -183,7 +183,7 @@ public class LoginServiceImpl  {
 //
 
                 // Generate JWT with username and roles
-                jwtToken= jwtUtil.generateToken(dbuser.getEmail(), dbuser.getRole().toString());
+//                jwtToken= jwtUtil.generateToken(dbuser.getEmail(), dbuser.getRole().toString());
                 Map<String, String> response = new HashMap<>();
                 response.put("token", jwtToken);
                 return ResponseEntity.ok(response);
@@ -207,7 +207,7 @@ public class LoginServiceImpl  {
            Optional<UserEntity> optionalUser=authRepo.findByEmail(email);
            if(optionalUser.isPresent()){
                UserEntity user=optionalUser.get();
-               user.setPassword(passwordEncoder.encode(password));
+//               user.setPassword(passwordEncoder.encode(password));
                authRepo.save(user);
                return ResponseEntity.ok(user);
            }

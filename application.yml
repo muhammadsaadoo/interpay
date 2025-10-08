@@ -1,0 +1,24 @@
+# 🎯 Spring Boot 3.x compatible config
+spring:
+  application:
+    name: user-service  # 🎯 Tells config server which file to send
+
+  # 🎯 NEW WAY: Config Server import (Spring Boot 3.x)
+  config:
+    import: "optional:configserver:http://localhost:8888"
+
+  # 🎯 OLD WAY (for reference - but use the import above)
+  cloud:
+    config:
+      uri: http://localhost:8888
+      fail-fast: false    # Set to false for development
+      profile: default
+      label: main
+
+## Optional: If you want to keep some local configuration
+#server:
+#  port: 8081  # Can be overridden by config server
+
+# Local development fallback
+app:
+  local-fallback: true

@@ -1,137 +1,64 @@
 package com.fintech.user_service.entities;
 
+
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.NonNull;
+import lombok.*;
+import org.hibernate.annotations.GenericGenerator;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
+import java.util.List;
 
 @Entity
-@Table(name = "Users")
-@Data
+@Table(name = "users",
+        indexes = {
+                @Index(name = "idx_email", columnList = "email"),
+                @Index(name = "idx_phone", columnList = "phone"),
+                @Index(name = "idx_status", columnList = "status")
+        })
+@Getter
+@Setter
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class UserEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column
-    private long UserId;
+    @GeneratedValue(generator = "uuid2")
+    @Column(name = "user_id", columnDefinition = "UUID")
+    private UUID userId;
 
-    @Column
-    @NonNull
-    @NotBlank(message = "Name is mandatory")
-    @Size(min = 2, max = 30, message = "Name should be between 2 and 30 characters")
-    private String first_name;
-
-
-    @Column
-    @NonNull
-    @NotBlank(message = "Name is mandatory")
-    @Size(min = 2, max = 30, message = "Name should be between 2 and 30 characters")
-    private String last_name;
-
-
-
-    @Column(unique = true)
-    @NonNull
-    @NotBlank(message = "Email is mandatory")
-    @Email(message = "Email should be valid")
-    @Pattern(regexp = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$", message = "Email should be valid")
+    @Column(nullable = false, unique = true, length = 255)
     private String email;
 
+    @Column(unique = true, length = 20)
+    private String phone;
 
-    @Column
-    @NonNull
-    @NotBlank(message = "Password is mandatory")
-    @Size(min = 2, max = 100, message = "hashed password should be between 2 and 100 characters")
-    private String password;
+    @Column(name = "password_hash", nullable = false, length = 255)
+    private String passwordHash;
 
-    @Column
-//    @NonNull
-    private String gender;
+    @Column(nullable = false, length = 20)
+    private String status = "ACTIVE"; // ACTIVE, SUSPENDED, CLOSED
 
-//    @NonNull
-    @Column
-    private Integer age;
+    @Column(name = "account_type", nullable = false, length = 20)
+    private String accountType; // PERSONAL, BUSINESS, MERCHANT
 
-//    @Column
-//    @Enumerated(EnumType.STRING)
-//    private IsVerified verify=IsVerified.unverified;
-//    public enum IsVerified {
-//        verified,
-//        unverified
-//    }
-    @Column
-    private Boolean verify=false;
+    @Column(name = "kyc_status", length = 20)
+    private String kycStatus = "PENDING"; // PENDING, VERIFIED, REJECTED
 
-
-
-
-
-
-    @Column
-    private String country;
-
-    @Column
-    @Enumerated(EnumType.STRING)
-    @NonNull
-    private Role role= Role.USER;
-
-    // Enum to represent user roles
-    public enum Role {
-        USER,
-        ADMIN,
-        BAN
-    }
-
-
-    @Column
-    @Enumerated(EnumType.STRING)
-    @NonNull
-    private UserType usertype= UserType.Regular;
-
-    // Enum to represent user roles
-    public enum UserType {
-        Regular,
-        Premium
-    }
-
-
-
-
-
-    @Column
-    @Enumerated(EnumType.STRING)
-    @NonNull
-    private Status status= Status.InActive;
-
-    // Enum to represent user roles
-    public enum Status {
-        Active,
-        InActive
-    }
-
-    // New fields for timestamps
-    @Column(nullable = true)
-    private LocalDateTime lastLogin;
-
-    @Column(nullable = false, updatable = false)
+    @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt = LocalDateTime.now();
 
-    @Column(nullable = true)
-    private String imagePath;
+    @Column(name = "updated_at", nullable = false)
+    private LocalDateTime updatedAt = LocalDateTime.now();
 
+    @Column(name = "last_login_at")
+    private LocalDateTime lastLoginAt;
 
+    // Relationships
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private UserProfileEntity profile;
 
-
-
-
-
-
-
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<KycDocumentEntity> kycDocuments;
 }

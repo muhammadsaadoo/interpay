@@ -37,6 +37,8 @@ services:
     networks:
       - interpay
     restart: unless-stopped
+    depends_on:
+      - postgres
 
   zipkin:
     image: openzipkin/zipkin
@@ -45,46 +47,8 @@ services:
       - "9411:9411"
     networks:
       - interpay
-
-  api-gateway:
-    build:
-      context: .                      # project root (where parent pom.xml lives)
-      dockerfile: api-gateway/Dockerfile
-    container_name: api-gateway-container
-    ports:
-      - "8086:8086"
-    volumes:
-      - ./api-gateway/src/main/resources/application-docker.yaml:/app/application-docker.yaml
-
-    networks:
-      - interpay
-    restart: unless-stopped
-
-  user-service:
-    build:
-      context: .                      # project root (where parent pom.xml lives)
-      dockerfile: user-service/Dockerfile
-    container_name: user-service-container
-    ports:
-      - "8085:8085"
-    volumes:
-      - ./user-service/src/main/resources/application-docker.yaml:/app/application-docker.yaml
-
-    networks:
-      - interpay
-    restart: unless-stopped
-
-  eureka-server:
-    build:
-      context: .                      # project root (where parent pom.xml lives)
-      dockerfile: eureka-server/Dockerfile
-    container_name: eureka-server-container
-    ports:
-      - "8761:8761"
-
-    networks:
-      - interpay
-    restart: unless-stopped
+    depends_on:
+      - postgres
 
   redis:
     image: redis:latest
@@ -96,6 +60,69 @@ services:
     networks:
       - interpay
     restart: unless-stopped
+    depends_on:
+      - postgres
+
+  config-server:
+    build:
+      context: .   # project root
+      dockerfile: config-server/Dockerfile
+    container_name: config-server-container
+    ports:
+      - "8888:8888"
+    networks:
+      - interpay
+    restart: unless-stopped
+    depends_on:
+      - postgres
+      - pgadmin
+      - zipkin
+      - redis
+
+  eureka-server:
+    build:
+      context: .   # project root
+      dockerfile: eureka-server/Dockerfile
+    container_name: eureka-server-container
+    ports:
+      - "8761:8761"
+    networks:
+      - interpay
+    restart: unless-stopped
+    depends_on:
+      - config-server
+
+  api-gateway:
+    build:
+      context: .   # project root
+      dockerfile: api-gateway/Dockerfile
+    container_name: api-gateway-container
+    ports:
+      - "8086:8086"
+    volumes:
+      - ./api-gateway/src/main/resources/application-docker.yaml:/app/application-docker.yaml
+    networks:
+      - interpay
+    restart: unless-stopped
+    depends_on:
+      - eureka-server
+      - config-server
+
+  user-service:
+    build:
+      context: .   # project root
+      dockerfile: user-service/Dockerfile
+    container_name: user-service-container
+    ports:
+      - "8085:8085"
+    volumes:
+      - ./user-service/src/main/resources/application-docker.yaml:/app/application-docker.yaml
+    networks:
+      - interpay
+    restart: unless-stopped
+    depends_on:
+      - eureka-server
+      - config-server
 
 volumes:
   postgres:

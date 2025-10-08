@@ -12,7 +12,6 @@ import java.util.Arrays;
 
 @SpringBootApplication
 @EnableConfigServer
-@EnableDiscoveryClient
 public class ConfigServerApplication {
 
 	public static void main(String[] args) {

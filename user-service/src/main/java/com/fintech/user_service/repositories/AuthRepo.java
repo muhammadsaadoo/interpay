@@ -14,8 +14,8 @@ import java.util.Optional;
 @Repository
 public interface AuthRepo extends JpaRepository<UserEntity,Integer> {
     Optional<UserEntity> findByEmail(String email);
-    @Query("SELECT u FROM UserEntity u WHERE u.role = :role")
-    List<UserEntity> findByRole(@Param("role") UserEntity.Role role);
+//    @Query("SELECT u FROM UserEntity u WHERE u.role = :role")
+//    List<UserEntity> findByRole(@Param("role") UserEntity.Role role);
 
 
 }
