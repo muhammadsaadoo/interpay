@@ -24,9 +24,10 @@ import java.util.List;
 public class UserEntity {
 
     @Id
-    @GeneratedValue(generator = "uuid2")
+    @GeneratedValue
     @Column(name = "user_id", columnDefinition = "UUID")
     private UUID userId;
+
 
     @Column(nullable = false, unique = true, length = 255)
     private String email;
@@ -47,10 +48,10 @@ public class UserEntity {
     private String kycStatus = "PENDING"; // PENDING, VERIFIED, REJECTED
 
     @Column(name = "created_at", nullable = false)
-    private LocalDateTime createdAt = LocalDateTime.now();
+    private LocalDateTime createdAt;
 
     @Column(name = "updated_at", nullable = false)
-    private LocalDateTime updatedAt = LocalDateTime.now();
+    private LocalDateTime updatedAt ;
 
     @Column(name = "last_login_at")
     private LocalDateTime lastLoginAt;
@@ -61,4 +62,17 @@ public class UserEntity {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<KycDocumentEntity> kycDocuments;
+
+    // --- Timestamp Hooks ---
+    @PrePersist
+    protected void onCreate() {
+        this.createdAt = LocalDateTime.now();
+        this.updatedAt = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        this.updatedAt = LocalDateTime.now();
+    }
+
 }
