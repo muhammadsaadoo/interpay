@@ -33,7 +33,7 @@ public class UserService {
         UserEntity user = UserEntity.builder()
                 .email(req.getEmail())
                 .phone(req.getPhone())
-                .passwordHash(passwordEncoder.encode(req.getPassword()))
+                .password(passwordEncoder.encode(req.getPassword()))
                 .accountType(req.getAccountType())
                 .status("ACTIVE")
                 .kycStatus("PENDING")

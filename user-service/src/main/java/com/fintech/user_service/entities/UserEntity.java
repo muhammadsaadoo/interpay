@@ -3,7 +3,7 @@ package com.fintech.user_service.entities;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.GenericGenerator;
+
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -36,7 +36,19 @@ public class UserEntity {
     private String phone;
 
     @Column(name = "password_hash", nullable = false, length = 255)
-    private String passwordHash;
+    private String password;
+
+    @Builder.Default
+    @Column(name = "role")
+    @Enumerated(EnumType.STRING)
+    private Role role=Role.USER;
+
+    // Enum to represent user roles
+    public enum Role {
+        USER,
+        ADMIN,
+
+    }
 
     @Column(nullable = false, length = 20)
     private String status = "ACTIVE"; // ACTIVE, SUSPENDED, CLOSED
@@ -49,6 +61,7 @@ public class UserEntity {
 
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
+
 
     @Column(name = "updated_at", nullable = false)
     private LocalDateTime updatedAt ;

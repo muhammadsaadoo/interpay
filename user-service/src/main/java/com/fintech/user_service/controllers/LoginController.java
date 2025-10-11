@@ -6,6 +6,8 @@ import com.fintech.user_service.dto.LoginDto;
 import com.fintech.user_service.services.LoginServiceImpl;
 import com.fintech.user_service.utils.JwtUtil;
 import jakarta.validation.Valid;
+import lombok.Data;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -14,26 +16,28 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/login")
+@RequestMapping("/api/login")
+@RequiredArgsConstructor
 public class LoginController {
-    @Autowired
-    private LoginServiceImpl loginService;
 
-    @Autowired
+    private final  LoginServiceImpl loginService;
     private JwtUtil jwtUtil;
 
-/////////////WITHOUT jwt Token/////////////////
+
 @PostMapping
 public ResponseEntity<?> login(@RequestBody LoginDto user) {
     System.out.println("Login start");
 
     // Call the service to check the user
-    return loginService.checkUser(user);
+    return loginService.velidateUser(user);
 
-
-
-    // Return 401 Unauthorized with no body if the user credentials are invalid
 }
+
+
+
+
+
+
 @PostMapping("/forgotPassword")
 public ResponseEntity<?> forgotPassword(@RequestBody Map<String, String> request){
     String email = request.get("email");

@@ -3,10 +3,13 @@ package com.fintech.user_service.services;
 import com.fintech.user_service.dto.AuthResponse;
 import com.fintech.user_service.dto.EmailVerificationRequest;
 import com.fintech.user_service.dto.LoginDto;
+import com.fintech.user_service.dto.LoginResponse;
 import com.fintech.user_service.entities.UserEntity;
 import com.fintech.user_service.repositories.AuthRepo;
+import com.fintech.user_service.repositories.UserRepository;
 import com.fintech.user_service.utils.JwtUtil;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -36,40 +39,44 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class LoginServiceImpl  {
     private static final long EXPIRATION_TIME = 5;
 
-    @Autowired
-    private AuthRepo authRepo;
+
+    private final UserRepository userRepository;
 
     private static final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
-    @Autowired
-    private AuthenticationManager authenticationManager;
 
-    @Autowired
-    private UserDetailServiceImpl userDetailService;
 
-    @Autowired
-    private JwtUtil jwtUtil;
+    private final AuthenticationManager authenticationManager;
 
-    @Autowired
-    private EmailServiceImpl emailService;
 
-    @Autowired
-    private RedisTemplate<String, String> redisTemplate;
+    private final UserDetailServiceImpl userDetailService;
+
+
+    private final  JwtUtil jwtUtil;
+
+
+    private final  EmailServiceImpl emailService;
+
+
+    private final RedisTemplate<String, String> redisTemplate;
 
 
     String jwtToken;
+    UserEntity user;
 
 
-    public ResponseEntity<?> checkUser(LoginDto user){
+    public ResponseEntity<?> velidateUser(LoginDto loginUser){
         try {
             // Authenticate the user
             System.out.println("Authenticate....................................");
             Authentication authentication = authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(user.getEmail(), user.getPassword())
+                    new UsernamePasswordAuthenticationToken(loginUser.getEmail(), loginUser.getPassword())
             );
+            System.out.println("ssssssssssssss");
 
 
 
@@ -82,18 +89,17 @@ public class LoginServiceImpl  {
                     .collect(Collectors.joining(","));
             // Update the user status to Active
             // Instead of calling the repository twice, combine the status update and user retrieval
-            Optional<UserEntity> dbuser= authRepo.findByEmail(userDetails.getUsername());
-            UserEntity userr=null;
-            if(dbuser.isPresent()){
-                userr=dbuser.get();
-//                userr.setStatus(UserEntity.Status.valueOf("Active"));
-//                userr.setLastLogin(LocalDateTime.now());// Set the user status to Active
-                authRepo.save(userr); // Save the updated user entity with Active status
+            Optional<UserEntity> optionalUser= userRepository.findByEmail(userDetails.getUsername());
+
+            if(optionalUser.isPresent()){
+                user=optionalUser.get();
+                user.setLastLoginAt(LocalDateTime.now());// Set the user status to Active
+                userRepository.save(user); // Save the updated user entity with Active status
             }
 
             // Generate JWT with username and roles
             String jwtToken=jwtUtil.generateToken(userDetails.getUsername(), roles);
-            return ResponseEntity.ok(new AuthResponse(jwtToken, userr));
+            return ResponseEntity.ok(new AuthResponse(jwtToken, user));
 
 
 
@@ -122,7 +128,7 @@ public class LoginServiceImpl  {
 //                        .status(HttpStatus.UNAUTHORIZED)
 //                        .body("the Email " + email + " is BAN");
 //            }
-            Optional<UserEntity> user_in_db=authRepo.findByEmail(email);
+            Optional<UserEntity> user_in_db=userRepository.findByEmail(email);
 
 
                 if(user_in_db.isPresent()){
@@ -168,7 +174,7 @@ public class LoginServiceImpl  {
                         .toList();
             }
 
-            Optional<UserEntity> user=authRepo.findByEmail(email_verification.getEmail());
+            Optional<UserEntity> user=userRepository.findByEmail(email_verification.getEmail());
             if(user.isEmpty()){
                 return ResponseEntity
                         .status(HttpStatus.NOT_FOUND)
@@ -204,11 +210,11 @@ public class LoginServiceImpl  {
 
     public ResponseEntity<?> updatePassword(String email,String password){
        try {
-           Optional<UserEntity> optionalUser=authRepo.findByEmail(email);
+           Optional<UserEntity> optionalUser=userRepository.findByEmail(email);
            if(optionalUser.isPresent()){
                UserEntity user=optionalUser.get();
 //               user.setPassword(passwordEncoder.encode(password));
-               authRepo.save(user);
+               userRepository.save(user);
                return ResponseEntity.ok(user);
            }
            return ResponseEntity.internalServerError().build();
