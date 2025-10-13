@@ -21,7 +21,6 @@ import java.util.UUID;
 public class UserProfileEntity {
 
     @Id
-    @GeneratedValue(generator = "uuid2")
     @Column(name = "profile_id", columnDefinition = "UUID")
     private UUID profileId;
 
@@ -47,7 +46,9 @@ public class UserProfileEntity {
     @Column(name = "address_line2")
     private String addressLine2;
 
+    @Column(name = "city")
     private String city;
+    @Column(name = "state")
     private String state;
 
     @Column(name = "postal_code", length = 20)
