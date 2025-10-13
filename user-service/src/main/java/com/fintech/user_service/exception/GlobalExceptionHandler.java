@@ -50,5 +50,17 @@ public class GlobalExceptionHandler {
                 .build();
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(body);
     }
+
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public ResponseEntity<UserRegistrationResponse> handleNotFound(ResourceNotFoundException ex) {
+        UserRegistrationResponse body = UserRegistrationResponse.builder()
+                .message(ex.getMessage())
+                .status("FAILED")
+                .statusCode(HttpStatus.NOT_FOUND.value())
+                .timestamp(LocalDateTime.now())
+                .build();
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(body);
+    }
+
 }
 
