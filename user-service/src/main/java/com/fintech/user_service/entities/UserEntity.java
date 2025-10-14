@@ -14,7 +14,7 @@ import java.util.List;
         indexes = {
                 @Index(name = "idx_email", columnList = "email"),
                 @Index(name = "idx_phone", columnList = "phone"),
-                @Index(name = "idx_status", columnList = "status")
+                @Index(name = "idx_status", columnList = "user_status")
         })
 @Getter
 @Setter
@@ -43,28 +43,26 @@ public class UserEntity {
     @Enumerated(EnumType.STRING)
     private Role role=Role.USER;
 
-    // Enum to represent user roles
-    public enum Role {
-        USER,
-        ADMIN,
 
-    }
+    @Builder.Default
+    @Column(name="user_status", nullable = false, length = 20)
+    private UserStatus userStatus=UserStatus.ACTIVE; // ACTIVE, SUSPENDED, CLOSED
 
-    @Column(nullable = false, length = 20)
-    private String status = "ACTIVE"; // ACTIVE, SUSPENDED, CLOSED
-
+    @Builder.Default
     @Column(name = "account_type", nullable = false, length = 20)
-    private String accountType; // PERSONAL, BUSINESS, MERCHANT
+    private AccountType accountType=AccountType.PERSONAL; // PERSONAL, BUSINESS, MERCHANT
 
+    @Builder.Default
     @Column(name = "kyc_status", length = 20)
-    private String kycStatus = "PENDING"; // PENDING, VERIFIED, REJECTED
+    private KycStatus  kycStatus=KycStatus.PENDING; // PENDING, VERIFIED, REJECTED
+
 
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
 
 
     @Column(name = "updated_at", nullable = false)
-    private LocalDateTime updatedAt ;
+    private LocalDateTime updatedAt;
 
     @Column(name = "last_login_at")
     private LocalDateTime lastLoginAt;
@@ -76,6 +74,28 @@ public class UserEntity {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<KycDocumentEntity> kycDocuments;
 
+
+    // Enum to represent user roles
+    public enum Role {
+        USER,
+        ADMIN,
+
+    }
+    public enum UserStatus{
+        ACTIVE,
+        SUSPENDED,
+        CLOSED
+    }
+    public enum AccountType{
+        PERSONAL,
+        BUSINESS,
+        MERCHANT
+    }
+    public enum KycStatus{
+        PENDING,
+        VERIFIED,
+        REJECTED
+    }
     // --- Timestamp Hooks ---
     @PrePersist
     protected void onCreate() {

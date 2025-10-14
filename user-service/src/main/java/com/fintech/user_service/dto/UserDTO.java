@@ -2,6 +2,7 @@ package com.fintech.user_service.dto;
 
 
 
+import com.fintech.user_service.entities.UserEntity;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -16,11 +17,12 @@ public class UserDTO {
     private UUID userId;
     private String email;
     private String phone;
-    private String status;
-    private String accountType;
-    private String kycStatus;
+    private UserEntity.UserStatus userStatus;
+    private UserEntity.AccountType accountType;
+    private UserEntity.KycStatus kycStatus;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private LocalDateTime lastLoginAt;
+    private UserEntity.Role role;
 }
 

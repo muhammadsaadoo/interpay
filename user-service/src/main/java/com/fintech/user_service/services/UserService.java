@@ -34,9 +34,9 @@ public class UserService {
                 .email(req.getEmail())
                 .phone(req.getPhone())
                 .password(passwordEncoder.encode(req.getPassword()))
-                .accountType(req.getAccountType())
-                .status("ACTIVE")
-                .kycStatus("PENDING")
+                .accountType(UserEntity.AccountType.valueOf(req.getAccountType()))
+                .userStatus(UserEntity.UserStatus.ACTIVE)
+                .kycStatus(UserEntity.KycStatus.PENDING)
                 // createdAt and updatedAt are set by entity defaults
                 .build();
 
@@ -46,8 +46,10 @@ public class UserService {
                 .userId(saved.getUserId().toString())
                 .email(saved.getEmail())
                 .accountType(saved.getAccountType())
-                .status(saved.getStatus())
+                .userStatus(saved.getUserStatus())
+                .status("Created")
                 .message("User registered successfully")
+
                 .statusCode(201)
                 .timestamp(LocalDateTime.now())
                 .build();
