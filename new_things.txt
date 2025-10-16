@@ -1,5 +1,5 @@
 for Admin use annotation this on controller
 //@PreAuthorize("hasRole('ADMIN')")
 pagination
-use external enums for lose cuppling for DTOS
-
+use external enums for lose coupling for DTO
+add jwt validation on api gateway
