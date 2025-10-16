@@ -1,6 +1,10 @@
 package com.fintech.user_service.entities;
 
 
+import com.fintech.user_service.dto.enums.AccountType;
+import com.fintech.user_service.dto.enums.KycStatus;
+import com.fintech.user_service.dto.enums.Role;
+import com.fintech.user_service.dto.enums.UserStatus;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -54,7 +58,7 @@ public class UserEntity {
 
     @Builder.Default
     @Column(name = "kyc_status", length = 20)
-    private KycStatus  kycStatus=KycStatus.PENDING; // PENDING, VERIFIED, REJECTED
+    private KycStatus kycStatus=KycStatus.PENDING; // PENDING, VERIFIED, REJECTED
 
 
     @Column(name = "created_at", nullable = false)
@@ -75,27 +79,7 @@ public class UserEntity {
     private List<KycDocumentEntity> kycDocuments;
 
 
-    // Enum to represent user roles
-    public enum Role {
-        USER,
-        ADMIN,
 
-    }
-    public enum UserStatus{
-        ACTIVE,
-        SUSPENDED,
-        CLOSED
-    }
-    public enum AccountType{
-        PERSONAL,
-        BUSINESS,
-        MERCHANT
-    }
-    public enum KycStatus{
-        PENDING,
-        VERIFIED,
-        REJECTED
-    }
     // --- Timestamp Hooks ---
     @PrePersist
     protected void onCreate() {

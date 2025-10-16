@@ -28,6 +28,7 @@
       <module name="ledger" options="-parameters" />
       <module name="payments-core" options="-parameters" />
       <module name="service-registry" options="" />
+      <module name="user-service" options="-parameters" />
     </option>
   </component>
 </project>
