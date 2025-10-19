@@ -22,7 +22,7 @@ public class GlobalJwtFilter implements GlobalFilter, Ordered {
     private JwtUtil jwtUtil;
 
     private final String[] publicEndpoints = {
-            "/auth/login", "/auth/signup", "/auth/register",
+            "/auth/login/test", "/auth/signup", "/auth/register",
             "/actuator/health", "/actuator/info"
     };
 

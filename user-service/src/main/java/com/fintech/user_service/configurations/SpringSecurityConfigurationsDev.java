@@ -37,41 +37,41 @@ public class SpringSecurityConfigurationsDev {
     @Autowired
     private JwtFilter jwtFilter;
 
-//    @Bean
-//    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-//        http.authorizeHttpRequests(auth -> auth
-//                        .requestMatchers("/**").permitAll())  // This permits all requests
-//                .httpBasic(Customizer.withDefaults())
-//                .csrf(AbstractHttpConfigurer::disable);
-//
-//        return http.build();
-//    }
-
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http
-                .csrf(csrf -> csrf.disable())
-                .authorizeHttpRequests(auth -> auth
-                        // Allow everything publicly except admin API
-                        .requestMatchers(
-                                "/api/login/**" ,     // Signup/login endpoints
-                                "/api/v1/public/**",   // Any public APIs you may have
-                                "/api/v1/users/**",    // Normal user APIs
-                                "/swagger-ui/**",      // Swagger UI if used
-                                "/v3/api-docs/**"
-                        ).permitAll()
-
-                        // Restrict ADMIN endpoints
-                        .requestMatchers("/api/v1/admin/**").hasRole("ADMIN")
-
-                        // Everything else allowed
-                        .anyRequest().permitAll()
-                )
-                .httpBasic(Customizer.withDefaults());
-        http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
+        http.authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/**").permitAll())  // This permits all requests
+                .httpBasic(Customizer.withDefaults())
+                .csrf(AbstractHttpConfigurer::disable);
 
         return http.build();
     }
+
+//    @Bean
+//    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+//        http
+//                .csrf(csrf -> csrf.disable())
+//                .authorizeHttpRequests(auth -> auth
+//                        // Allow everything publicly except admin API
+//                        .requestMatchers(
+//                                "/api/login/**" ,     // Signup/login endpoints
+//                                "/api/v1/public/**",   // Any public APIs you may have
+//                                "/api/v1/users/**",    // Normal user APIs
+//                                "/swagger-ui/**",      // Swagger UI if used
+//                                "/v3/api-docs/**"
+//                        ).permitAll()
+//
+//                        // Restrict ADMIN endpoints
+//                        .requestMatchers("/api/v1/admin/**").hasRole("ADMIN")
+//
+//                        // Everything else allowed
+//                        .anyRequest().permitAll()
+//                )
+//                .httpBasic(Customizer.withDefaults());
+//        http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
+//
+//        return http.build();
+//    }
 
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
